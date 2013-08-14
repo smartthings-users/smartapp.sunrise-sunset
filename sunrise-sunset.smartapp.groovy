@@ -22,30 +22,30 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 preferences {
-	section("Sunrise") {
-		input ('sunrise_mode', 'mode', title: 'Change to mode: ')
-	}
-	
+    section("Sunrise") {
+        input ('sunrise_mode', 'mode', title: 'Change to mode: ')
+    }
+    
     section("Sunset") {
-		input ('sunset_mode', 'mode', title: 'Change to mode: ')
-	}
+        input ('sunset_mode', 'mode', title: 'Change to mode: ')
+    }
     
     section("Miscellaneous") {
-    	input ('zip', 'number', title: 'Zip Code', required: false)
+        input ('zip', 'number', title: 'Zip Code', required: false)
     }
 }
 
 def installed() {
-	log.debug "Installed with settings: ${settings}"
+    log.debug "Installed with settings: ${settings}"
 
-	initialize()
+    initialize()
 }
 
 def updated() {
-	log.debug "Updated with settings: ${settings}"
+    log.debug "Updated with settings: ${settings}"
 
-	unsubscribe()
-	initialize()
+    unsubscribe()
+    initialize()
 }
 
 def initialize() {
@@ -59,8 +59,8 @@ def initialize() {
     
     def timezone = TimeZone.getTimeZone(localData.location.tz_long)
     
-	log.debug( "Sunset today is at $sunsetTime" )
-	log.debug( "Sunrise today is at $sunriseTime" )
+    log.debug( "Sunset today is at $sunsetTime" )
+    log.debug( "Sunrise today is at $sunriseTime" )
     
     unschedule()    
     schedule(timeToday(sunriseTime, timezone), sunrise)
@@ -70,21 +70,21 @@ def initialize() {
 }
 
 def sunrise() {
-	changeMode(settings.sunrise_mode)
+    changeMode(settings.sunrise_mode)
 }
 
 def sunset() {
-	changeMode(settings.sunset_mode)
+    changeMode(settings.sunset_mode)
 }
 
 def changeMode(newMode) {
-	if (location.mode != newMode) {
-		if (location.modes?.find{it.name == newMode}) {
-			setLocationMode(newMode)
-			log.debug "${label} has changed the mode to '${newMode}'"
-		}
-		else {
-			log.debug "${label} tried to change to undefined mode '${newMode}'"
-		}
-	}
+    if (location.mode != newMode) {
+        if (location.modes?.find{it.name == newMode}) {
+            setLocationMode(newMode)
+            log.debug "${label} has changed the mode to '${newMode}'"
+        }
+        else {
+            log.debug "${label} tried to change to undefined mode '${newMode}'"
+        }
+    }
 }
